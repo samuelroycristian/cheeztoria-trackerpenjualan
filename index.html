@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cheeztoria Thai Tea Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #ff8c42;
+      --primary-dark: #e8752c;
+      --bg: #f9f9f9;
+      --card: #ffffff;
+      --text: #444;
+      --muted: #777;
+      --radius: 12px;
+      --shadow: 0 3px 8px rgba(0,0,0,0.08);
+    }
+
+    * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+      gap: 10px;
+    }
+
+    header img {
+      height: 60px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 22px;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin-top: 0;
+      margin-bottom: 16px;
+      color: var(--primary-dark);
+    }
+
+    .menu-item {
+      border: 1px solid #eee;
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      transition: 0.2s ease;
+    }
+
+    .menu-item:hover {
+      box-shadow: 0 3px 8px rgba(255,140,66,0.15);
+    }
+
+    .menu-item strong {
+      color: var(--text);
+      font-size: 15px;
+    }
+
+    .menu-item .price {
+      color: var(--primary-dark);
+      font-weight: 600;
+      margin: 4px 0;
+    }
+
+    .menu-item small {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .qty-controls button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .qty-controls button:hover {
+      background: var(--primary-dark);
+    }
+
+    .qty-controls input {
+      width: 50px;
+      text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 4px;
+    }
+
+    .summary label {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .summary p {
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin: 4px 0 12px;
+    }
+
+    input[type="number"], input[type="text"] {
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    button.main {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    button.main:hover {
+      background: var(--primary-dark);
+    }
+
+    .report {
+      background: #faf6f2;
+      border-radius: var(--radius);
+      padding: 14px;
+      white-space: pre-wrap;
+      font-family: monospace;
+      font-size: 13px;
+      border: 1px dashed #ffccaa;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="tHAI Tea (1).png" alt="Logo Cheeztoria">
+    <h1>Cheeztoria Thai Tea Tracker</h1>
+  </header>
+
+  <div class="container">
+    <section>
+      <div class="card">
+        <h2>Pilih Menu</h2>
+        <div id="menuList"></div>
+      </div>
+    </section>
+
+    <aside>
+      <div class="card">
+        <h2>Ringkasan</h2>
+        <div class="summary">
+          <label>Total Cup:</label>
+          <p id="totalCup">0</p>
+          <label>Pendapatan Menu:</label>
+          <p id="totalRevenue">Rp 0</p>
+        </div>
+
+        <h2>Input Pendapatan</h2>
+        <input type="number" id="cash" placeholder="Cash" />
+        <input type="number" id="qris" placeholder="Qris" />
+        <input type="number" id="gofood" placeholder="Gofood" />
+        <input type="number" id="expense" placeholder="Pengeluaran" />
+        <input type="number" id="extra" placeholder="Uang Plus" />
+        <button class="main" id="generateReport">Cetak Laporan Harian</button>
+      </div>
+    </aside>
+  </div>
+
+  <div class="card" style="max-width:1200px;margin:20px auto;">
+    <h2>Laporan Harian</h2>
+    <div class="report" id="reportArea">Belum ada laporan...</div>
+    <button class="main" id="copyReport" style="margin-top:10px;">Copy Laporan</button>
+  </div>
+
+  <footer>🍊 Cheeztoria — Manis, Gurih, dan Lembut seperti Thai Tea Keju</footer>
+
+  <script>
+    const menus = [
+      { id:'M1', name:'Thai Tea Original', price:8000, type:'Harga Original' },
+      { id:'M2', name:'Matcha Original', price:13000, type:'Harga Original' },
+      { id:'M3', name:'Chocolate Original', price:10000, type:'Harga Original' },
+      { id:'M4', name:'Thai Tea + Topping', price:13000, type:'Harga + Topping' },
+      { id:'M5', name:'Matcha + Topping', price:18000, type:'Harga + Topping' },
+      { id:'M6', name:'Chocolate + Topping', price:15000, type:'Harga + Topping' },
+	  { id:'M7', name:'Extra Boba', price:3000, type:'Harga Boba' }
+    ];
+
+    const menuList = document.getElementById('menuList');
+    const totalCupEl = document.getElementById('totalCup');
+    const totalRevenueEl = document.getElementById('totalRevenue');
+    const reportArea = document.getElementById('reportArea');
+
+    let orders = {};
+    let totalCup = 0;
+    let totalRevenue = 0;
+
+    function formatRp(n){ return 'Rp ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+
+    function renderMenu(){
+      menuList.innerHTML = '';
+      menus.forEach(m=>{
+        const div = document.createElement('div');
+        div.className = 'menu-item';
+        div.innerHTML = `
+          <strong>${m.name}</strong>
+          <div class="price">${formatRp(m.price)}</div>
+          <small>${m.type}</small>
+          <div class="qty-controls">
+            <button onclick="changeQty('${m.id}', -1)">-</button>
+            <input type="number" id="qty_${m.id}" value="${orders[m.id]?.qty || 0}" readonly />
+            <button onclick="changeQty('${m.id}', 1)">+</button>
+          </div>
+        `;
+        menuList.appendChild(div);
+      });
+    }
+
+    function changeQty(id, delta){
+      if(!orders[id]) orders[id] = { qty:0, price:menus.find(m=>m.id===id).price };
+      orders[id].qty = Math.max(0, orders[id].qty + delta);
+      document.getElementById(`qty_${id}`).value = orders[id].qty;
+      calcSummary();
+    }
+
+    function calcSummary(){
+      totalCup = 0; totalRevenue = 0;
+      for(const k in orders){
+        totalCup += orders[k].qty;
+        totalRevenue += orders[k].qty * orders[k].price;
+      }
+      totalCupEl.textContent = totalCup;
+      totalRevenueEl.textContent = formatRp(totalRevenue);
+    }
+
+    document.getElementById('generateReport').addEventListener('click', ()=>{
+      const cash = parseInt(document.getElementById('cash').value)||0;
+      const qris = parseInt(document.getElementById('qris').value)||0;
+      const gofood = parseInt(document.getElementById('gofood').value)||0;
+      const expense = parseInt(document.getElementById('expense').value)||0;
+      const extra = parseInt(document.getElementById('extra').value)||0;
+
+      let report = `Tanggal: ${new Date().toLocaleDateString('id-ID', {day:'2-digit', month:'long', year:'numeric'})}\n`;
+      report += `Cheeztoria - Laporan Harian\n\nRINCIAN PENJUALAN\n-----------------\n`;
+      for(const k in orders){
+        if(orders[k].qty>0){
+          const menu = menus.find(m=>m.id===k);
+          report += `${menu.name} (${menu.type}): ${orders[k].qty} cup\n`;
+        }
+      }
+      report += `\nTotal Cup Terjual: ${totalCup}\nPendapatan Menu: ${formatRp(totalRevenue)}\n\nREKAP PENJUALAN\n-----------------\n`;
+      report += `Cash: ${formatRp(cash)}\nQris: ${formatRp(qris)}\nGofood: ${formatRp(gofood)}\nPengeluaran: ${formatRp(expense)}\nUang Plus: ${formatRp(extra)}\n\n`;
+      const total = cash + qris + gofood + extra - expense;
+      report += `Total Akhir: ${formatRp(total)}\n============================`;
+
+      reportArea.textContent = report;
+    });
+
+    document.getElementById('copyReport').addEventListener('click', async()=>{
+      try {
+        await navigator.clipboard.writeText(reportArea.textContent);
+        alert('Laporan disalin ke clipboard!');
+      } catch(e) {
+        alert('Gagal menyalin laporan.');
+      }
+    });
+
+    renderMenu();
+  </script>
+</body>
+</html>
