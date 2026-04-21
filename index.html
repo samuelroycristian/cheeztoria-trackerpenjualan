@@ -8,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-
 :root{
 --primary:#ff7a18;
 --bg:#f4f6f9;
@@ -19,11 +18,7 @@
 
 *{box-sizing:border-box;font-family:'Inter',sans-serif}
 
-body{
-margin:0;
-background:var(--bg);
-color:var(--text);
-}
+body{margin:0;background:var(--bg);color:var(--text);}
 
 header{
 background:var(--primary);
@@ -54,7 +49,6 @@ box-shadow:0 4px 12px rgba(0,0,0,0.06);
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
 gap:12px;
-margin-bottom:10px;
 }
 
 .menu-item{
@@ -66,10 +60,7 @@ flex-direction:column;
 gap:4px;
 }
 
-.price{
-font-size:12px;
-color:var(--muted);
-}
+.price{font-size:12px;color:var(--muted);}
 
 .qty-controls{
 display:flex;
@@ -144,7 +135,6 @@ padding:12px;
 border-radius:12px;
 margin-top:10px;
 }
-
 </style>
 </head>
 
@@ -169,15 +159,12 @@ margin-top:10px;
 <option value="Minuman Original">Minuman Original</option>
 <option value="Minuman + Topping">Minuman + Topping</option>
 <option value="Extra">Extra</option>
-<option value="Makanan">Makanan</option>
 </select>
 
 <button class="main" onclick="addMenu()">Tambah Menu</button>
-
 </div>
 
 <div class="card">
-
 <h2>Ringkasan</h2>
 
 <div class="summary-box">
@@ -189,11 +176,9 @@ margin-top:10px;
 <span>Pendapatan Menu</span>
 <span id="totalRevenue">Rp 0</span>
 </div>
-
 </div>
 
 <div class="card">
-
 <h2>Pendapatan</h2>
 
 <input type="number" id="cash" placeholder="Cash">
@@ -205,13 +190,10 @@ margin-top:10px;
 <input type="number" id="extra" placeholder="Uang Plus">
 
 <button class="main" onclick="generateReport()">Buat Laporan</button>
-
 <button class="main" onclick="sendWhatsApp()">Kirim ke WhatsApp</button>
-
 <button class="secondary" onclick="resetReport()">Reset Laporan</button>
 
 <div class="report" id="reportArea">Belum ada laporan</div>
-
 </div>
 
 </div>
@@ -221,39 +203,38 @@ margin-top:10px;
 const today=new Date().toISOString().slice(0,10)
 
 function autoReset(){
-
 const last=localStorage.getItem('lastDate')
-
 if(last!==today){
-
 localStorage.removeItem('orders')
-
 localStorage.setItem('lastDate',today)
-
 }
-
 }
-
 autoReset()
 
+// ✅ MENU FINAL (TANPA MAKANAN + TAMBAHAN BARU)
 const defaultMenus=[
 
-{id:'M1',name:'Thai Tea Original',price:10000,type:'Minuman Original'},
-{id:'M2',name:'Matcha Original',price:13000,type:'Minuman Original'},
-{id:'M3',name:'Chocolate Original',price:10000,type:'Minuman Original'},
+// ORIGINAL
+{id:'M1',name:'Thai Tea Original',price:13000,type:'Minuman Original'},
+{id:'M2',name:'Matcha Original',price:16000,type:'Minuman Original'},
+{id:'M3',name:'Chocolate Original',price:13000,type:'Minuman Original'},
 
-{id:'M4',name:'Thai Tea + Topping',price:15000,type:'Minuman + Topping'},
-{id:'M5',name:'Matcha + Topping',price:18000,type:'Minuman + Topping'},
-{id:'M6',name:'Chocolate + Topping',price:15000,type:'Minuman + Topping'},
+// TOPPING
+{id:'M4',name:'Thai Tea + Topping',price:18000,type:'Minuman + Topping'},
+{id:'M5',name:'Matcha + Topping',price:21000,type:'Minuman + Topping'},
+{id:'M6',name:'Chocolate + Topping',price:18000,type:'Minuman + Topping'},
 
-{id:'M7',name:'Extra Keju',price:3000,type:'Extra'},
-{id:'M8',name:'Extra Cream Cheese',price:4000,type:'Extra'},
+// MENU BARU
+{id:'M7',name:'Thai Tea Oreo',price:15000,type:'Minuman + Topping'},
+{id:'M8',name:'Matcha Oreo',price:18000,type:'Minuman + Topping'},
+{id:'M9',name:'Coklat Oreo',price:15000,type:'Minuman + Topping'},
+{id:'M10',name:'Coffee Pistachio Latte',price:18000,type:'Minuman + Topping'},
+{id:'M11',name:'Creamy Pistachio',price:18000,type:'Minuman + Topping'},
 
-{id:'M9',name:'Tipis (Isi 5)',price:10000,type:'Makanan'},
-{id:'M10',name:'Minggu (Isi 7)',price:14000,type:'Makanan'},
-{id:'M11',name:'Messi (Isi 10)',price:20000,type:'Makanan'},
-{id:'M12',name:'Sempolongan (Isi 12)',price:24000,type:'Makanan'},
-{id:'M13',name:'Twin Cup (5 sempol + 5 sosis)',price:22000,type:'Makanan'}
+// EXTRA
+{id:'M12',name:'Extra Keju',price:4000,type:'Extra'},
+{id:'M13',name:'Extra Cream Cheese',price:5000,type:'Extra'},
+{id:'M14',name:'Oreo',price:3000,type:'Extra'}
 
 ]
 
@@ -268,20 +249,16 @@ return 'Rp '+n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.')
 }
 
 function renderMenu(){
-
 const container=document.getElementById('menuList')
-
 container.innerHTML=''
 
 const categories={}
-
 menus.forEach(m=>{
 if(!categories[m.type]) categories[m.type]=[]
 categories[m.type].push(m)
 })
 
 for(const cat in categories){
-
 const title=document.createElement('h3')
 title.textContent=cat
 container.appendChild(title)
@@ -290,14 +267,12 @@ const grid=document.createElement('div')
 grid.className='menu-grid'
 
 categories[cat].forEach(m=>{
-
 if(!orders[m.id]) orders[m.id]={qty:0,price:m.price}
 
 const div=document.createElement('div')
 div.className='menu-item'
 
 div.innerHTML=`
-
 <strong>${m.name}</strong>
 <div class="price">${formatRp(m.price)}</div>
 
@@ -309,54 +284,35 @@ div.innerHTML=`
 
 <button class="edit" onclick="editPrice('${m.id}')">Edit Harga</button>
 <button class="edit" onclick="deleteMenu('${m.id}')">Hapus</button>
-
 `
-
 grid.appendChild(div)
-
 })
 
 container.appendChild(grid)
-
 }
-
 calcSummary()
-
 }
 
 function changeQty(id,delta){
-
 orders[id].qty+=delta
-
 if(orders[id].qty<0) orders[id].qty=0
-
 saveOrders()
-
 document.getElementById('qty_'+id).textContent=orders[id].qty
-
 calcSummary()
-
 }
 
 function calcSummary(){
-
 let totalCup=0
 let totalRevenue=0
-
 for(const k in orders){
-
 totalCup+=orders[k].qty||0
 totalRevenue+=(orders[k].qty||0)*(orders[k].price||0)
-
 }
-
 document.getElementById('totalCup').textContent=totalCup
 document.getElementById('totalRevenue').textContent=formatRp(totalRevenue)
-
 }
 
 function addMenu(){
-
 const name=document.getElementById('newName').value
 const price=parseInt(document.getElementById('newPrice').value)
 const type=document.getElementById('newType').value
@@ -367,48 +323,30 @@ return
 }
 
 const id='M'+Date.now()
-
 menus.push({id,name,price,type})
-
 saveMenus()
-
 renderMenu()
-
 }
 
 function deleteMenu(id){
-
 if(!confirm('Hapus menu?')) return
-
 menus=menus.filter(m=>m.id!==id)
-
 delete orders[id]
-
 saveMenus()
 saveOrders()
-
 renderMenu()
-
 }
 
 function editPrice(id){
-
 const menu=menus.find(m=>m.id===id)
-
 const newPrice=prompt('Edit harga',menu.price)
-
 if(newPrice){
-
 menu.price=parseInt(newPrice)
 orders[id].price=parseInt(newPrice)
-
 saveMenus()
 saveOrders()
-
 renderMenu()
-
 }
-
 }
 
 let lastReport=""
@@ -427,24 +365,17 @@ let report='📊 CHEEZTORIA - LAPORAN HARIAN\n'
 report+='=====================\n\n'
 
 report+='📦 Penjualan\n'
-
 for(const k in orders){
-
 if(orders[k].qty>0){
-
 const menu=menus.find(m=>m.id===k)
-
 report+='• '+menu.name+' : '+orders[k].qty+'\n'
-
 }
-
 }
 
 report+='\nTotal Item: '+document.getElementById('totalCup').textContent
 report+='\nPendapatan Menu: '+document.getElementById('totalRevenue').textContent
 
 report+='\n\n💰 Pembayaran\n'
-
 report+='Cash: '+formatRp(cash)+'\n'
 report+='QRIS: '+formatRp(qris)+'\n'
 report+='GoFood: '+formatRp(gofood)+'\n'
@@ -455,44 +386,30 @@ report+='\n📉 Pengeluaran: '+formatRp(expense)
 report+='\n➕ Uang Plus: '+formatRp(extra)
 
 const total=cash+qris+gofood+grabfood+shopeefood+extra-expense
-
 report+='\n\nTOTAL AKHIR: '+formatRp(total)
 
 document.getElementById('reportArea').textContent=report
-
 navigator.clipboard.writeText(report)
-
 lastReport=report
 
 alert('Laporan siap dikirim ke WhatsApp')
-
 }
 
 function sendWhatsApp(){
-
 if(!lastReport){
 alert('Buat laporan dulu')
 return
 }
-
 const text=encodeURIComponent(lastReport)
-
 window.open('https://wa.me/?text='+text,'_blank')
-
 }
 
 function resetReport(){
-
 if(confirm('Reset laporan hari ini?')){
-
 orders={}
-
 saveOrders()
-
 location.reload()
-
 }
-
 }
 
 renderMenu()
